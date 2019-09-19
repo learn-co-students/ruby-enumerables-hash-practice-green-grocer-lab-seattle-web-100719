@@ -21,7 +21,7 @@ def apply_coupons(cart, coupons)
     if_clearance = v[:clearance]
     initial_price = v[:price]
 
-    if coupon
+    if coupon 
       number_coupons = coupons.count(coupon)
       disc_item = coupon[:item]
       qty = coupon[:num]
@@ -50,5 +50,15 @@ def apply_clearance(cart)
 end
 
 def checkout(cart, coupons)
-  # code here
+  total = 0
+
+  new_cart = consolidate_cart(cart)
+  cart_with_coupons = apply_coupons(new_cart, coupons)
+  cart_with_clearance = apply_clearance(cart_with_coupons)
+
+  cart_with_clearance.each do |k, v|
+    total += v[:price] * v[:count]
+  end
+
+  total > 100 ? total * 0.9 :total
 end
